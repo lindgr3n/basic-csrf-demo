@@ -23,6 +23,7 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.get("/", function (req, res) {
   if (req.session.isValid) {
@@ -51,21 +52,28 @@ app.get("/transactions", function (req, res) {
 
 app.post("/transactions", function (req, res) {
   const { transactions } = db.data;
-  console.log("POSTING", req.body);
+  const date = new Date();
+  console.log("TRANSACTION", req.body);
+  console.log("TRANSACTION", req.body.name);
   const transaction = {
     id: transactions.length + 1,
     name: req.body.name,
-    href: req.body.href,
+    href: req.body.href ?? "#",
     amount: req.body.amount,
-    currency: req.body.currency,
-    status: req.body.status,
-    date: req.body.date,
-    datetime: req.body.datetime,
+    currency: req.body.currency ?? "USD",
+    status: req.body.status ?? "success",
+    date: date.toLocaleDateString("en-us", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }),
+    datetime: new Date().toLocaleDateString("se-SV"),
     type: req.body.type ?? "withdrawal",
   };
   transactions.push(transaction);
   db.write();
-  res.sendStatus(200);
+  // res.sendStatus(200);
+  res.render("index");
 });
 
 app.post("/login", function (req, res) {
