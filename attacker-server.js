@@ -1,20 +1,22 @@
-const express = require('express');
-var cors = require('cors');
+import express from "express";
+import cors from "cors";
 const port = 4000;
 
 const app = express();
 const stolenData = [];
-let maliciousLink = '';
+let maliciousLink = "";
 
 app.use(cors());
 
-app.set('views', './views');
-app.set('view engine', 'ejs');
+app.set("views", "./views");
+app.set("view engine", "ejs");
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 
-app.get('/', function(req, res) {
-  res.render('index');
+app.get("/", function (req, res) {
+  res.render("index");
 });
 
-app.listen(port, () => console.log(`Attacker server listening at localhost:${port}`));
+app.listen(port, () =>
+  console.log(`Attacker server listening at localhost:${port}`)
+);
