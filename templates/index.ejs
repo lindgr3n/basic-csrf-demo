@@ -4,8 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>The Vulnerable Movie Center</title>
-    <style></style>
+    <title>💸 Swash</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3"></script>
   </head>
@@ -512,6 +511,7 @@
                     <button
                       type="button"
                       class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                      @click="onDepositMoney"
                     >
                       Add money
                     </button>
@@ -740,10 +740,14 @@
         },
         computed: {
           accountBalance() {
-            return this.transactions.reduce(
-              (sum, transaction) => (sum += parseInt(transaction.amount)),
-              0
-            );
+            return this.transactions.reduce((sum, transaction) => {
+              if (transaction.type === "deposition") {
+                sum += parseInt(transaction.amount);
+              } else {
+                sum -= parseInt(transaction.amount);
+              }
+              return sum;
+            }, 0);
           },
         },
         methods: {
@@ -755,6 +759,44 @@
             const user = await response.json();
             console.log("WOHOOO login", user);
             this.user = user;
+          },
+
+          async onDepositMoney() {
+            const date = new Date();
+            const recipients = [
+              "Joel Baudin",
+              "Gabriel Baudin",
+              "Alan Radi",
+              "Robert Ögren",
+              "Mattias Larsson",
+              "Andreas Stokholm",
+            ];
+            const response = await fetch("/transactions", {
+              method: "POST",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                name: `Payment from ${
+                  recipients[Math.floor(Math.random() * (5 - 0) + 0)]
+                }`,
+                href: "#",
+                amount: `${Math.floor(Math.random() * (10001 - 10) + 10)}`,
+                currency: "USD",
+                status: "success",
+                date: date.toLocaleDateString("en-us", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                }),
+                datetime: new Date().toLocaleDateString("se-SV"),
+                type: "deposition",
+              }),
+            });
+            console.log(response);
+            const responseTransactions = await fetch("/transactions");
+            this.transactions = await responseTransactions.json();
           },
 
           async onSendMoney() {

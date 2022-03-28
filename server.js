@@ -25,7 +25,19 @@ app.use(
 app.use(bodyParser.json());
 
 app.get("/", function (req, res) {
-  res.render("index", {
+  if (req.session.isValid) {
+    res.render("index", {
+      isValidSession: req.session.isValid,
+      username: req.session.username,
+      reviews,
+    });
+  } else {
+    res.redirect("login");
+  }
+});
+
+app.get("/login", function (req, res) {
+  res.render("login", {
     isValidSession: req.session.isValid,
     username: req.session.username,
     reviews,
@@ -49,6 +61,7 @@ app.post("/transactions", function (req, res) {
     status: req.body.status,
     date: req.body.date,
     datetime: req.body.datetime,
+    type: req.body.type ?? "withdrawal",
   };
   transactions.push(transaction);
   db.write();
@@ -59,10 +72,16 @@ app.post("/login", function (req, res) {
   req.session.isValid = true;
   req.session.username = "Johan Lindgren";
   req.session.email = "johan@lindgr3n.com";
-  return res.json({
-    username: req.session.username,
-    email: req.session.email,
-  });
+
+  res.redirect("/");
+  // res.render("index", {
+  //   isValidSession: req.session.isValid,
+  //   username: req.session.username,
+  // });
+  // return res.json({
+  //   username: req.session.username,
+  //   email: req.session.email,
+  // });
 });
 
 app.get("/user", function (req, res) {

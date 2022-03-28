@@ -20,23 +20,24 @@ if (!db.data) {
   const { transactions } = db.data;
   transactions.push({
     id: 1,
-    name: "Payment to Molly Sanders",
+    name: "Payment from Maria Lindgren",
     href: "#",
-    amount: "$20,000",
+    amount: "40000",
     currency: "USD",
     status: "success",
     date: "July 11, 2020",
-    datetime: "2020-07-11",
+    datetime: "2022-03-28",
+    type: "deposition",
   });
   transactions.push({
     id: 2,
-    name: "Payment to Molly Sanders",
+    name: "Payment to Joel Baudin",
     href: "#",
-    amount: "$10,000",
+    amount: "10000",
     currency: "USD",
     status: "success",
     date: "July 10, 2020",
-    datetime: "2020-07-10",
+    datetime: "2022-03-29",
   });
 
   // Finally write db.data content to file
