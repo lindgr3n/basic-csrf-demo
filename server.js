@@ -74,14 +74,6 @@ app.post("/login", function (req, res) {
   req.session.email = "johan@lindgr3n.com";
 
   res.redirect("/");
-  // res.render("index", {
-  //   isValidSession: req.session.isValid,
-  //   username: req.session.username,
-  // });
-  // return res.json({
-  //   username: req.session.username,
-  //   email: req.session.email,
-  // });
 });
 
 app.get("/user", function (req, res) {
@@ -95,15 +87,10 @@ app.get("/user", function (req, res) {
   }
 });
 
-// app.post("/user", function (req, res) {
-//   if (req.session.isValid) {
-//     req.session.username = req.body.username;
-//     req.session.email = req.body.email;
-//     res.redirect("/user");
-//   } else {
-//     res.redirect("/");
-//   }
-// });
+app.get("/logout", function (req, res) {
+  req.session.destroy();
+  res.redirect("login");
+});
 
 app.listen(port, () =>
   console.log(`The server is listening at http://localhost:${port}`)
