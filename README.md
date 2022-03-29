@@ -17,7 +17,7 @@ This project uses the following technologies:
 
 To run this project, follow these steps:
 
-1. Clone this repository (`git clone https://github.com/lindgr3n/basic-csrf-demo.git`)
+1. Clone this repository (`git clone git@github.com:lindgr3n/basic-csrf-demo.git`)
 
 2. Move to the root folder of the project (`csrf-sample-app`) in your machine and install the dependencies by running the following command:
 
