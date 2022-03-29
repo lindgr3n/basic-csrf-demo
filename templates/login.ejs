@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>" />
 
     <title>💸 Swash</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -115,8 +116,14 @@
         methods: {
           async onSubmit() {
             const formData = new FormData();
-            formData.append("email", this.email);
-            formData.append("password", this.password);
+            formData.append("email", "");
+            formData.append("password", "");
+            formData.append(
+              "_csrf",
+              document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content")
+            );
             const response = await fetch("/login", {
               method: "post",
               body: new URLSearchParams(formData),
