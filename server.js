@@ -100,6 +100,15 @@ app.get("/logout", function (req, res) {
   res.redirect("login");
 });
 
+// error handler
+app.use(function (err, req, res, next) {
+  if (err.code !== "EBADCSRFTOKEN") return next(err);
+
+  // handle CSRF token errors here
+  res.status(403);
+  res.render("csrf_error");
+});
+
 app.listen(port, () =>
   console.log(`The server is listening at http://localhost:${port}`)
 );
