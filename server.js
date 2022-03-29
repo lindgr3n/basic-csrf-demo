@@ -17,6 +17,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       httpOnly: true,
+      sameSite: "strict",
     },
   })
 );
