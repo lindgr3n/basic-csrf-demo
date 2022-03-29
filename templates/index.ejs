@@ -10,18 +10,8 @@
   </head>
   <body class="h-full">
     <div id="app" class="min-h-full">
-      <div
-        v-if="!user.email"
-        class="min-h-full flex justify-center items-center"
-      >
-        <form @submit.prevent="onSubmit">
-          <input type="text" name="email" value="johan@lindgr3n.com" />
-          <input type="password" name="password" value="password" />
-          <button type="submit">Login</button>
-        </form>
-      </div>
       <!-- Static sidebar for desktop -->
-      <div v-else>
+      <div>
         <div class="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0">
           <!-- Sidebar component, swap this element with another sidebar if you like -->
           <div
@@ -717,11 +707,13 @@
     <script>
       Vue.createApp({
         async mounted() {
-          const response = await fetch("/transactions");
-          this.transactions = await response.json();
+          // Fetch user info
           const userResponse = await fetch("/user");
           this.user = await userResponse.json();
-          console.log("WOHOOO user mount", this.user.email);
+
+          // Fetch transactions
+          const response = await fetch("/transactions");
+          this.transactions = await response.json();
         },
         data() {
           return {
@@ -738,6 +730,7 @@
             },
           };
         },
+
         computed: {
           accountBalance() {
             return this.transactions.reduce((sum, transaction) => {
@@ -750,17 +743,8 @@
             }, 0);
           },
         },
-        methods: {
-          async onSubmit() {
-            const response = await fetch("/login", {
-              method: "post",
-              body: { email: "", password: "" },
-            });
-            const user = await response.json();
-            console.log("WOHOOO login", user);
-            this.user = user;
-          },
 
+        methods: {
           async onDepositMoney() {
             const recipients = [
               "Joel Baudin",
@@ -773,7 +757,7 @@
             const formData = new FormData();
             formData.append(
               "name",
-              `Payment to ${
+              `Payment from ${
                 recipients[Math.floor(Math.random() * (5 - 0) + 0)]
               }`
             );
@@ -787,27 +771,12 @@
               method: "POST",
               body: new URLSearchParams(formData),
             });
-            // const response = await fetch("/transactions", {
-            //   method: "POST",
-            //   headers: {
-            //     Accept: "application/json",
-            //     "Content-Type": "application/json",
-            //   },
-            //   body: JSON.stringify({
-            //     name: `Payment from ${
-            //       recipients[Math.floor(Math.random() * (5 - 0) + 0)]
-            //     }`,
-            //     amount: `${Math.floor(Math.random() * (10001 - 10) + 10)}`,
-            //     type: "deposition",
-            //   }),
-            // });
-            console.log(response);
+
             const responseTransactions = await fetch("/transactions");
             this.transactions = await responseTransactions.json();
           },
 
           async onSendMoney() {
-            const date = new Date();
             const recipients = [
               "Joel Baudin",
               "Gabriel Baudin",
@@ -831,20 +800,7 @@
               method: "POST",
               body: new URLSearchParams(formData),
             });
-            // const response = await fetch("/transactions", {
-            //   method: "POST",
-            //   headers: {
-            //     Accept: "application/json",
-            //     "Content-Type": "application/json",
-            //   },
-            //   body: JSON.stringify({
-            //     name: `Payment to ${
-            //       recipients[Math.floor(Math.random() * (5 - 0) + 0)]
-            //     }`,
-            //     amount: `${Math.floor(Math.random() * (10001 - 10) + 10)}`,
-            //   }),
-            // });
-            console.log(response);
+
             const responseTransactions = await fetch("/transactions");
             this.transactions = await responseTransactions.json();
           },

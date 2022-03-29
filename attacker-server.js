@@ -3,8 +3,6 @@ import cors from "cors";
 const port = 4000;
 
 const app = express();
-const stolenData = [];
-let maliciousLink = "";
 
 app.use(cors());
 

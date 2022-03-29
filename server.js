@@ -6,8 +6,6 @@ import db from "./db.js";
 const port = 3000;
 const app = express();
 
-let reviews = [];
-
 app.set("views", "./templates");
 app.set("view engine", "ejs");
 
@@ -27,37 +25,32 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 app.get("/", function (req, res) {
   if (req.session.isValid) {
-    res.render("index", {
-      isValidSession: req.session.isValid,
-      username: req.session.username,
-      reviews,
-    });
+    res.render("index");
   } else {
     res.redirect("login");
   }
 });
 
 app.get("/login", function (req, res) {
-  res.render("login", {
-    isValidSession: req.session.isValid,
-    username: req.session.username,
-    reviews,
-  });
+  res.render("login");
 });
 
 app.get("/transactions", function (req, res) {
+  if (!req.session.isValid) {
+    return res.json("Unathenticated");
+  }
   const { transactions } = db.data;
   res.json(transactions);
 });
 
 app.post("/transactions", function (req, res) {
-  const { transactions } = db.data;
-  const date = new Date();
   if (!req.session.isValid) {
     return res.render("login");
   }
-  console.log("TRANSACTION", req.body);
-  console.log("TRANSACTION", req.body.name);
+
+  const { transactions } = db.data;
+  const date = new Date();
+
   const transaction = {
     id: transactions.length + 1,
     name: req.body.name,
@@ -75,7 +68,6 @@ app.post("/transactions", function (req, res) {
   };
   transactions.push(transaction);
   db.write();
-  // res.sendStatus(200);
   res.render("index");
 });
 
