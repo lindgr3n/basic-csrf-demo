@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <meta name="csrf-token" content="<%= csrfToken %>" />
+
     <title>💸 Swash</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/vue@3"></script>
@@ -114,11 +116,18 @@
 
         methods: {
           async onSubmit() {
+            var token = document
+              .querySelector('meta[name="csrf-token"]')
+              .getAttribute("content");
             const formData = new FormData();
             formData.append("email", this.email);
             formData.append("password", this.password);
+
             const response = await fetch("/login", {
               method: "post",
+              headers: {
+                "CSRF-Token": token, // <-- is the csrf token as a header
+              },
               body: new URLSearchParams(formData),
             });
             window.location = "/";

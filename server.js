@@ -2,6 +2,7 @@ import express from "express";
 import session from "express-session";
 import bodyParser from "body-parser";
 import db from "./db.js";
+import csrf from "csurf";
 
 const port = 3000;
 const app = express();
@@ -22,17 +23,22 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(csrf());
 
 app.get("/", function (req, res) {
   if (req.session.isValid) {
-    res.render("index");
+    res.render("index", {
+      csrfToken: req.csrfToken(),
+    });
   } else {
     res.redirect("login");
   }
 });
 
 app.get("/login", function (req, res) {
-  res.render("login");
+  res.render("login", {
+    csrfToken: req.csrfToken(),
+  });
 });
 
 app.get("/transactions", function (req, res) {
@@ -68,7 +74,9 @@ app.post("/transactions", function (req, res) {
   };
   transactions.push(transaction);
   db.write();
-  res.render("index");
+  res.render("index", {
+    csrfToken: req.csrfToken(),
+  });
 });
 
 app.post("/login", function (req, res) {

@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>" />
 
     <title>💸 Swash</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -769,6 +770,11 @@
 
             const response = await fetch("/transactions", {
               method: "POST",
+              headers: {
+                "CSRF-Token": document
+                  .querySelector('meta[name="csrf-token"]')
+                  .getAttribute("content"),
+              },
               body: new URLSearchParams(formData),
             });
 
@@ -798,6 +804,11 @@
 
             const response = await fetch("/transactions", {
               method: "POST",
+              headers: {
+                "CSRF-Token": document
+                  .querySelector('meta[name="csrf-token"]')
+                  .getAttribute("content"),
+              },
               body: new URLSearchParams(formData),
             });
 
