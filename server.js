@@ -53,6 +53,9 @@ app.get("/transactions", function (req, res) {
 app.post("/transactions", function (req, res) {
   const { transactions } = db.data;
   const date = new Date();
+  if (!req.session.isValid) {
+    return res.render("login");
+  }
   console.log("TRANSACTION", req.body);
   console.log("TRANSACTION", req.body.name);
   const transaction = {
