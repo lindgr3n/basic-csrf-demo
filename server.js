@@ -23,6 +23,20 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+app.use(function (req, res, next) {
+  const referer = req.headers.referer
+    ? new URL(req.headers.referer).host
+    : req.headers.host;
+  const origin = req.headers.origin ? new URL(req.headers.origin).host : null;
+
+  if (req.headers.host == (origin || referer)) {
+    next();
+  } else {
+    res.status(403);
+    res.render("csrf_error");
+  }
+});
+
 app.get("/", function (req, res) {
   if (req.session.isValid) {
     res.render("index");
